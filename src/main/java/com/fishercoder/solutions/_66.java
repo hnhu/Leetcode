@@ -8,37 +8,27 @@ package com.fishercoder.solutions;
  */
 public class _66 {
 
-  public static class Solution1 {
-    public int[] plusOne(int[] digits) {
-      boolean carry = false;
-      int len = digits.length;
-      int[] temp = digits;
-      //process the last digit at first, to get carry value
-      if (digits[len - 1] + 1 == 10) {
-        carry = true;
-        temp[len - 1] = 0;
-      } else {
-        temp[len - 1] += 1;
-        return temp;
-      }
+	public static class Solution1 {
+		public int[] plusOne(int[] digits) {
+			int index = digits.length - 1;
+			digits[index] += 1;
+			while (true) {
+				if (digits[index] < 10) {
+					return digits;
+				}
 
-      //start from the second last element
-      for (int i = len - 2; i >= 0; i--) {
-        if (carry && temp[i] + 1 == 10) {
-          temp[i] = 0;
-          carry = true;
-        } else if (carry) {
-          temp[i] += 1;
-          carry = false;
-        }
-      }
-      if (carry && temp[0] == 0) {
-        int[] res = new int[len + 1];
-        res[0] = 1;
-        //all the rest of the numbers should all be zeroes, so we don't need to copy from the original array
-        return res;
-      }
-      return temp;
-    }
-  }
+				digits[index] %= 10;
+				if (index == 0) {
+					int[] ret = new int[digits.length + 1];
+					System.arraycopy(digits, 0, ret, 1, digits.length);
+					ret[0] = 1;
+					return ret;
+				} else {
+					digits[index - 1] += 1;
+					index--;
+				}
+
+			}
+		}
+	}
 }

@@ -9,16 +9,47 @@ package com.fishercoder.solutions;
 
 public class _53 {
 
-  public static class Solution1 {
-    /**credit: https://discuss.leetcode.com/topic/5000/accepted-o-n-solution-in-java*/
-    public int maxSubArray(int[] nums) {
-      int maxSoFar = nums[0];
-      int maxEndingHere = nums[0];
-      for (int i = 1; i < nums.length; i++) {
-        maxEndingHere = Math.max(nums[i], maxEndingHere + nums[i]);
-        maxSoFar = Math.max(maxEndingHere, maxSoFar);
-      }
-      return maxSoFar;
-    }
-  }
+	public static class Solution1 {
+
+		public int maxSubArray(int[] nums) {
+			return maxSubArray(nums, 0, nums.length);
+		}
+
+		private int maxSubArray(int[] nums, int left, int right) {
+			if (left >= right) {
+				return Integer.MIN_VALUE;
+			}
+			if (left + 1 == right) {
+				return nums[left];
+			}
+			if (left + 2 == right) {
+				return max(nums[left], nums[right - 1], nums[left] + nums[right - 1]);
+			}
+			int mid = (left + right) / 2;
+
+			int lMax = maxSubArray(nums, left, mid);
+			int rMax = maxSubArray(nums, mid + 1, right);
+			int mMax = nums[mid];
+			int sum = mMax;
+			for (int i = mid - 1; i >= left; i--) {
+				sum += nums[i];
+				if (sum > mMax) {
+					mMax = sum;
+				}
+			}
+			sum = mMax;
+			for (int i = mid + 1; i < right; i++) {
+				sum += nums[i];
+				if (sum > mMax) {
+					mMax = sum;
+				}
+			}
+			return max(lMax, rMax, mMax);
+		}
+
+		private int max(int i, int j, int k) {
+			return Math.max(Math.max(i, j), k);
+		}
+
+	}
 }
