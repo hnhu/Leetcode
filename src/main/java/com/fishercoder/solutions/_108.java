@@ -9,21 +9,21 @@ import com.fishercoder.common.classes.TreeNode;
  */
 public class _108 {
 
-    public static class Solution1 {
-        public TreeNode sortedArrayToBST(int[] num) {
-            return rec(num, 0, num.length - 1);
-        }
+	public static class Solution1 {
+		public TreeNode sortedArrayToBST(int[] nums) {
+			return sortedArrayToBST(nums, 0, nums.length);
+		}
 
-        public TreeNode rec(int[] num, int low, int high) {
-            if (low > high) {
-                return null;
-            }
-            int mid = low + (high - low) / 2;
-            TreeNode root = new TreeNode(num[mid]);
-            root.left = rec(num, low, mid - 1);
-            root.right = rec(num, mid + 1, high);
-            return root;
-        }
-    }
+		private TreeNode sortedArrayToBST(int[] nums, int left, int right) {
+			if (left >= right) {
+				return null;
+			}
+			int mid = (left + right) / 2;
+			TreeNode root = new TreeNode(nums[mid]);
+			root.left = sortedArrayToBST(nums, left, mid);
+			root.right = sortedArrayToBST(nums, mid + 1, right);
+			return root;
+		}
+	}
 
 }

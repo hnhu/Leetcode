@@ -1,6 +1,5 @@
 package com.fishercoder.solutions;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,24 +21,37 @@ import java.util.List;
  */
 public class _118 {
 
-    public List<List<Integer>> generate(int numRows) {
-        List<List<Integer>> result = new ArrayList();
-        int len = 1;
-        for (int i = 0; i < numRows; i++) {
-            List<Integer> row = new ArrayList(len);
-            row.add(1);
-            if (i > 0) {
-                List<Integer> lastRow = result.get(i - 1);
-                for (int j = 1; j < len; j++) {
-                    if (j < lastRow.size()) {
-                        row.add(lastRow.get(j - 1) + lastRow.get(j));
-                    }
-                }
-                row.add(1);
-            }
-            result.add(row);
-            len++;
-        }
-        return result;
-    }
+	public List<List<Integer>> generate(int numRows) {
+		List<List<Integer>> list = new ArrayList<>();
+		if (numRows == 0) {
+			return list;
+		}
+		for (int i = 0; i < numRows; i++) {
+			list.add(getRow(i));
+		}
+		return list;
+
+	}
+
+	public List<Integer> getRow(int rowIndex) {
+		List<Integer> list = new ArrayList<>();
+		for (int i = 0; i < rowIndex + 1; i++) {
+			list.add(c(rowIndex, i));
+		}
+		return list;
+
+	}
+
+	private int c(int m, int n) {
+		if (n == 0) {
+			return 1;
+		}
+		long ret = 1;
+		for (int i = 1; i <= n; i++) {
+			ret *= m--;
+			ret /= i;
+		}
+		return (int) ret;
+	}
+
 }

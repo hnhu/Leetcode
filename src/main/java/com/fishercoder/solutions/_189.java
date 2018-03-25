@@ -1,10 +1,5 @@
 package com.fishercoder.solutions;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.fishercoder.solutions._189.Solution2.rotate_naive;
-
 /**
  * 189. Rotate Array
  *
@@ -14,72 +9,40 @@ import static com.fishercoder.solutions._189.Solution2.rotate_naive;
 
 public class _189 {
 
-    public static class Solution1 {
-        public void rotate(int[] nums, int k) {
-            int len = nums.length;
-            int[] tmp = new int[len];
-            for (int i = 0; i < len; i++) {
-                tmp[(i + k) % len] = nums[i];
-            }
-            for (int i = 0; i < len; i++) {
-                nums[i] = tmp[i];
-            }
-        }
-    }
+	public static class Solution1 {
 
-    public static class Solution2 {
-        /**
-         * My original idea and got AC'ed.
-         * One thing to notice is that when k > nums.length, we'll continue to rotate_naive the array, it just becomes k -= nums.length
-         */
-        public static void rotate_naive(int[] nums, int k) {
-            if (k == 0 || k == nums.length) {
-                return;
-            }
-            if (k > nums.length) {
-                k -= nums.length;
-            }
-            List<Integer> tmp = new ArrayList();
-            int i = 0;
-            if (nums.length - k >= 0) {
-                i = nums.length - k;
-                for (; i < nums.length; i++) {
-                    tmp.add(nums[i]);
-                }
-            } else {
-                i = nums.length - 1;
-                for (; i >= 0; i--) {
-                    tmp.add(nums[i]);
-                }
+		public void rotate(int[] nums, int k) {
+			k %= nums.length;
+			if (k < nums.length / 2) {
+				rotateRight(nums, k);
+			} else {
+				rotateLeft(nums, nums.length - k);
+			}
+		}
 
-            }
-            for (i = 0; i < nums.length - k; i++) {
-                tmp.add(nums[i]);
-            }
-            for (i = 0; i < tmp.size(); i++) {
-                nums[i] = tmp.get(i);
-            }
-        }
-    }
+		private void rotateRight(int[] nums, int k) {
+			k %= nums.length;
+			int[] cache = new int[k];
+			System.arraycopy(nums, nums.length - k, cache, 0, k);
+			for (int i = 0; i < k; i++) {
+				for (int j = nums.length - 1 - i; j >= k; j -= k) {
+					nums[j] = nums[j - k];
+				}
+			}
+			System.arraycopy(cache, 0, nums, 0, k);
+		}
 
-    public static void main(String... strings) {
-//        int k = 1;
-//        int[] nums = new int[]{1,2,3};
-//        int[] nums = new int[]{1};
-//        int[] nums = new int[]{1,2};
+		private void rotateLeft(int[] nums, int k) {
+			k %= nums.length;
+			int[] cache = new int[k];
+			System.arraycopy(nums, 0, cache, 0, k);
+			for (int i = 0; i < k; i++) {
+				for (int j = i; j < nums.length - k; j += k) {
+					nums[j] = nums[j + k];
+				}
+			}
+			System.arraycopy(cache, 0, nums, nums.length - k, k);
+		}
 
-//        int k = 3;
-//        int[] nums = new int[]{1,2};
-
-//        int k = 2;
-//        int[] nums = new int[]{1,2};
-
-        int k = 4;
-        int[] nums = new int[]{1, 2, 3};
-
-//        int k = 2;
-//        int[] nums = new int[]{-1};
-        rotate_naive(nums, k);
-    }
-
+	}
 }
