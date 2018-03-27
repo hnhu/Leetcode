@@ -23,18 +23,17 @@ public class _203 {
 	 * but, for both cases, we'll also move curr forward, so we put curr = curr.next in the outside.
 	 */
 	public ListNode removeElements(ListNode head, int val) {
-		ListNode dummy = new ListNode(-1);
-		dummy.next = head;
-		ListNode curr = head;
-		ListNode prev = dummy;
-		while (curr != null) {
-			if (curr.val == val) {
-				prev.next = curr.next;
-			} else {
-				prev = prev.next;
-			}
-			curr = curr.next;
+		while (head != null && head.val == val) {
+			head = head.next;
 		}
-		return dummy.next;
+		if (head == null) {
+			return head;
+		}
+		for (ListNode p = head; p != null; p = p.next) {
+			while (p.next != null && p.next.val == val) {
+				p.next = p.next.next;
+			}
+		}
+		return head;
 	}
 }

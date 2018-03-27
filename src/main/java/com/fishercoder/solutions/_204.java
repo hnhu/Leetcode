@@ -92,46 +92,19 @@ package com.fishercoder.solutions;
  */
 public class _204 {
 
-    public static class Solution1 {
-        /**
-         * This solution works, but takes too long and resulted in TLE on Leetcode.
-         */
-        public int countPrimes(int n) {
-            int count = 0;
-            for (int i = 1; i < n; i++) {
-                if (isPrime(i)) {
-                    count++;
-                }
-            }
-            return count;
-        }
-
-        private boolean isPrime(int k) {
-            if (k <= 1) {
-                return false;
-            }
-            for (int i = 2; i * i <= k; i++) {
-                if (k % i == 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
-
-    public static class Solution2 {
-        public int countPrimes(int n) {
-            boolean[] notPrime = new boolean[n];
-            int count = 0;
-            for (int i = 2; i < n; i++) {
-                if (!notPrime[i]) {
-                    count++;
-                    for (int j = 2; i * j < n; j++) {
-                        notPrime[i * j] = true;
-                    }
-                }
-            }
-            return count;
-        }
-    }
+	public static class Solution2 {
+		public int countPrimes(int n) {
+			boolean[] notPrime = new boolean[n];
+			int count = 0;
+			for (int i = 2; i < n; i++) {
+				if (!notPrime[i]) {
+					count++;
+					for (int j = 2; i * j < n; j++) {
+						notPrime[i * j] = true;
+					}
+				}
+			}
+			return count;
+		}
+	}
 }
