@@ -8,23 +8,19 @@ package com.fishercoder.solutions;
 public class _278 {
 
 	public int firstBadVersion(int n) {
-		int left = 1;
-		int right = n;
-		if (isBadVersion(left)) {
-			return left;
-		}
+		return firstBadVersion(0, n);
 
+	}
+
+	private int firstBadVersion(int left, int right) {
+		int mid;
 		while (left + 1 < right) {
-			int mid = left + (right - left) / 2;
+			mid = (right - left) / 2 + left;
 			if (isBadVersion(mid)) {
 				right = mid;
 			} else {
 				left = mid;
 			}
-		}
-
-		if (isBadVersion(left)) {
-			return left;
 		}
 		return right;
 	}

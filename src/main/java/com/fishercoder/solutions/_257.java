@@ -1,9 +1,9 @@
 package com.fishercoder.solutions;
 
-import com.fishercoder.common.classes.TreeNode;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fishercoder.common.classes.TreeNode;
 
 /**257. Binary Tree Paths
  *
@@ -22,58 +22,44 @@ All root-to-leaf paths are:
 */
 
 public class _257 {
-    public static class Solution1 {
-        //a very typical/good question to test your recursion/dfs understanding.
-        public List<String> binaryTreePaths_more_concise(TreeNode root) {
-            List<String> paths = new ArrayList<String>();
-            if (root == null) {
-                return paths;
-            }
-            dfs(root, paths, "");
-            return paths;
-        }
+	public static class Solution1 {
 
-        private void dfs(TreeNode root, List<String> paths, String path) {
-            if (root.left == null && root.right == null) {
-                paths.add(path + root.val);
-                return;
-            }
-            path += root.val + "->";
-            if (root.left != null) {
-                dfs(root.left, paths, path);
-            }
-            if (root.right != null) {
-                dfs(root.right, paths, path);
-            }
-        }
-    }
-    
-    public static class Solution2 {
-        public List<String> binaryTreePaths(TreeNode root) {
-            List<String> paths = new ArrayList<String>();
-            dfs(root, paths, new StringBuilder());
-            return paths;
-        }
+		public List<String> binaryTreePaths(TreeNode root) {
+			List<String> ret = new ArrayList<>();
+			if (root == null) {
+				return ret;
+			}
 
-        private void dfs(TreeNode root, List<String> paths, StringBuilder sb) {
-            if (root == null) {
-                return;
-            }
-            if (root.left == null && root.right == null) {
-                sb.append(root.val);
-                paths.add(sb.toString());
-                return;
-            }
-            sb.append(root.val + "->");
-            String curr = sb.toString();
-            if (root.left != null) {
-                dfs(root.left, paths, sb);
-            }
-            sb.setLength(0);
-            sb.append(curr);
-            if (root.right != null) {
-                dfs(root.right, paths, sb);
-            }
-        }
-    }
+			if (root.left == null && root.right == null) {
+				ret.add(root.val + "");
+				return ret;
+			}
+			if (root.left != null) {
+				ret.addAll(binaryTreePaths(root.left, root.val + ""));
+			}
+			if (root.right != null) {
+				ret.addAll(binaryTreePaths(root.right, root.val + ""));
+			}
+			return ret;
+		}
+
+		private List<String> binaryTreePaths(TreeNode root, String prefix) {
+			List<String> ret = new ArrayList<>();
+			if (root == null) {
+				return ret;
+			}
+
+			if (root.left == null && root.right == null) {
+				ret.add(prefix + "->" + root.val);
+				return ret;
+			}
+			if (root.left != null) {
+				ret.addAll(binaryTreePaths(root.left, prefix + "->" + root.val));
+			}
+			if (root.right != null) {
+				ret.addAll(binaryTreePaths(root.right, prefix + "->" + root.val));
+			}
+			return ret;
+		}
+	}
 }
