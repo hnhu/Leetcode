@@ -6,13 +6,13 @@ package com.fishercoder.solutions;
  Given a = 1 and b = 2, return 3.*/
 public class _371 {
 
-    /**reference: http://stackoverflow.com/questions/9070937/adding-two-numbers-without-operator-clarification*/
-    public int getSum(int a, int b) {
-        if (b == 0) {
-            return a;
-        }
-        int sum = a ^ b;
-        int carry = (a & b) << 1;
-        return getSum(sum, carry);
-    }
+	public int getSum(int a, int b) {
+		int t;
+		while (b != 0) {
+			t = a ^ b; // sum
+			b = (a & b) << 1; // carry
+			a = t;
+		}
+		return a;
+	}
 }

@@ -1,5 +1,7 @@
 package com.fishercoder.solutions;
 
+import java.util.Arrays;
+
 /**
  * 414. Third Maximum Number
  *
@@ -28,26 +30,41 @@ package com.fishercoder.solutions;
  */
 public class _414 {
 
-    public int thirdMax(int[] nums) {
-        long max1 = Long.MIN_VALUE;
-        long max2 = Long.MIN_VALUE;
-        long max3 = Long.MIN_VALUE;
-        for (int i : nums) {
-            max1 = Math.max(max1, i);
-        }
-        for (int i : nums) {
-            if (i == max1) {
-                continue;
-            }
-            max2 = Math.max(max2, i);
-        }
-        for (int i : nums) {
-            if (i == max1 || i == max2) {
-                continue;
-            }
-            max3 = Math.max(max3, i);
-        }
-        return (int) (max3 == Long.MIN_VALUE ? max1 : max3);
-    }
+	public int thirdMax(int[] nums) {
+		if (nums.length == 1) {
+			return nums[0];
+		}
+		if (nums.length == 2) {
+			return nums[0] > nums[1] ? nums[0] : nums[1];
+		}
 
+		long[] top = new long[3];
+		Arrays.fill(top, Long.MIN_VALUE);
+		for (int i = 0; i < nums.length; i++) {
+			if (top[0] != nums[i] && top[1] != nums[i] && top[2] != nums[i]) {
+				updateTop2(top, 1, 2, updateTop2(top, 0, 1, nums[i]));
+			}
+		}
+		return (int) ((top[2] == Long.MIN_VALUE) ? top[0] : top[2]);
+	}
+
+	/**
+	 * 
+	 *  update top[j], top[k] with top2(top[j], top[k], n), and return min(top[j], top[k], n)
+	 */
+	private long updateTop2(long[] top, int j, int k, long n) { // given top[j] > top[k]
+		if (n < top[k]) {
+			return n;
+		}
+		if (n < top[j]) {
+			long t = top[k];
+			top[k] = n;
+			return t;
+		}
+		// min > top[j];
+		long t = top[k];
+		top[k] = top[j];
+		top[j] = n;
+		return t;
+	}
 }

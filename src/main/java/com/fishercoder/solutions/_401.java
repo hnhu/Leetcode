@@ -1,7 +1,9 @@
 package com.fishercoder.solutions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A binary watch has 4 LEDs on the top which represent the hours (0-11), and the 6 LEDs on the bottom represent the minutes (0-59).
@@ -24,16 +26,53 @@ import java.util.List;
  */
 public class _401 {
 
-    public List<String> readBinaryWatch(int num) {
-        List<String> times = new ArrayList<>();
-        for (int h = 0; h < 12; h++) {
-            for (int m = 0; m < 60; m++) {
-                if (Integer.bitCount(h * 60 + m) == num) {
-                    times.add(String.format("%d:%02d", h, m));//%02 means to pad this two-digit decimal number on the left with zeroes
-                }
-            }
-        }
-        return times;
-    }
+	Map<Integer, List<Integer>> hours = new HashMap<>();
+	Map<Integer, List<Integer>> minutes = new HashMap<>();
 
+	public List<String> readBinaryWatch(int num) {
+		if (hours.isEmpty()) {
+			int key;
+			for (int i = 0; i < 12; i++) {
+				key = bitCount(i);
+				if (hours.containsKey(key)) {
+					hours.get(key).add(i);
+				} else {
+					List<Integer> value = new ArrayList<>();
+					value.add(i);
+					hours.put(key, value);
+				}
+			}
+		}
+		if (minutes.isEmpty()) {
+
+			int key;
+			for (int i = 0; i < 60; i++) {
+				key = bitCount(i);
+				if (minutes.containsKey(key)) {
+					minutes.get(key).add(i);
+				} else {
+					List<Integer> value = new ArrayList<>();
+					value.add(i);
+					minutes.put(key, value);
+				}
+			}
+
+		}
+		List<String> ret = new ArrayList<>();
+		for (int i = 0; i <= num; i++) {
+			if (hours.containsKey(i) && minutes.containsKey(num - i)) {
+				for (Integer hour : hours.get(i)) {
+					for (Integer minute : minutes.get(num - i)) {
+						ret.add(hour + ":" + (minute < 10 ? "0" + minute : minute));
+					}
+				}
+
+			}
+		}
+		return ret;
+	}
+
+	private int bitCount(int i) {
+		return Integer.bitCount(i);
+	}
 }
