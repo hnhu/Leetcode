@@ -32,28 +32,24 @@ package com.fishercoder.solutions;
  */
 public class _482 {
 
-    public String licenseKeyFormatting(String S, int K) {
-        StringBuilder stringBuilder = new StringBuilder();
-        char[] SChars = S.toCharArray();
-        for (int i = S.length() - 1, j = 0; i >= 0; ) {
-            if (j < K) {
-                if (SChars[i] != '-') {
-                    if (SChars[i] >= 'a' && SChars[i] <= 'z') {
-                        stringBuilder.append(Character.toUpperCase(SChars[i]));
-                    } else {
-                        stringBuilder.append(SChars[i]);
-                    }
-                    j++;
-                }
-                i--;
-            } else if (j == K) {
-                j = 0;
-                stringBuilder.append('-');
-            }
-        }
-        if (stringBuilder.length() > 1 && stringBuilder.substring(stringBuilder.length() - 1).equals("-")) {
-            return stringBuilder.reverse().substring(1);
-        }
-        return stringBuilder.reverse().toString();
-    }
+	public String licenseKeyFormatting(String S, int K) {
+		char[] sArray = S.replaceAll("-", "").toUpperCase().toCharArray();
+		if (sArray.length <= K) {
+			return String.valueOf(sArray);
+		}
+		char[] tArray = new char[sArray.length + (sArray.length - 1) / K];
+		int i = 0;
+		int j = 0;
+		for (i = 0; i < sArray.length % K; i++) {
+			tArray[j++] = sArray[i];
+		}
+		for (int k = 0; k < sArray.length / K; k++) {
+			if (j != 0) {
+				tArray[j++] = '-';
+			}
+			System.arraycopy(sArray, k * K + i, tArray, j, K);
+			j += K;
+		}
+		return String.valueOf(tArray);
+	}
 }

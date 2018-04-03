@@ -1,14 +1,8 @@
 package com.fishercoder.solutions;
 
+import java.util.Stack;
+
 import com.fishercoder.common.classes.TreeNode;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-
 
 /**
  * 501. Find Mode in Binary Search Tree
@@ -28,83 +22,71 @@ import java.util.Queue;
  */
 public class _501 {
 
-    public static class Solution1 {
-        public int[] findMode(TreeNode root) {
-            int[] result = new int[]{};
-            Map<Integer, Integer> map = new HashMap();
-            if (root == null) {
-                return result;
-            }
-            List<Integer> list = bfs(root, map);
-            result = new int[list.size()];
-            for (int i = 0; i < list.size(); i++) {
-                result[i] = list.get(i);
-            }
-            return result;
-        }
+	public static class Solution {
 
-        private List<Integer> bfs(TreeNode root, Map<Integer, Integer> map) {
-            Queue<TreeNode> queue = new LinkedList<>();
-            queue.offer(root);
-            while (!queue.isEmpty()) {
-                int size = queue.size();
-                for (int i = 0; i < size; i++) {
-                    TreeNode treeNode = queue.poll();
-                    if (treeNode.left != null) {
-                        queue.offer(treeNode.left);
-                    }
-                    if (treeNode.right != null) {
-                        queue.offer(treeNode.right);
-                    }
-                    map.put(treeNode.val, map.getOrDefault(treeNode.val, 0) + 1);
-                }
-            }
+		public int[] findMode(TreeNode root) {
+			if (root == null) {
+				return new int[] {};
+			}
+			if (root.left == null && root.right == null) {
+				return new int[] { root.val };
+			}
+			Integer val = null;
+			int max = Integer.MIN_VALUE; // max count
+			int count = 0;
+			int size = 0; // size of return array
+			Stack<TreeNode> stack = new Stack<>();
+			TreeNode p = root;
+			// count
+			while (p != null || !stack.isEmpty()) {
+				if (p != null) {
+					stack.push(p);
+					p = p.left;
+				} else {
+					p = stack.pop();
+					if (val == null || p.val != val) {
+						val = p.val;
+						count = 1;
+					} else {
+						count++;
+					}
+					if (count == max) {
+						size++;
+					} else if (count > max) {
+						max = count;
+						size = 1;
+					}
+					p = p.right;
+				}
+			}
+			// set ret
+			int[] ret = new int[size];
+			p = root;
+			val = null;
+			count = 0;
+			while (p != null || !stack.isEmpty()) {
+				if (p != null) {
+					stack.push(p);
+					p = p.left;
+				} else {
+					p = stack.pop();
+					if (val == null || p.val != val) {
+						val = p.val;
+						count = 1;
+					} else {
+						count++;
+					}
+					if (count == max) {
+						ret[--size] = p.val;
+						if (size == 0) {
+							return ret;
+						}
+					}
+					p = p.right;
+				}
+			}
 
-            int highestFrequency = 0;
-            List<Integer> list = new ArrayList<>();
-            for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-                if (entry.getValue() > highestFrequency) {
-                    highestFrequency = entry.getValue();
-                    list.clear();
-                    list.add(entry.getKey());
-                } else if (entry.getValue() == highestFrequency) {
-                    list.add(entry.getKey());
-                }
-            }
-
-            return list;
-        }
-    }
-
-    public static class Solution2 {
-        public int[] findMode(TreeNode root) {
-            Map<Integer, Integer> map = new HashMap<>();
-            dfs(root, map);
-            int modeCount = 0;
-            for (int key : map.keySet()) {
-                modeCount = Math.max(modeCount, map.get(key));
-            }
-            List<Integer> mode = new ArrayList<>();
-            for (int key : map.keySet()) {
-                if (map.get(key) == modeCount) {
-                    mode.add(key);
-                }
-            }
-            int[] result = new int[mode.size()];
-            for (int i = 0; i < mode.size(); i++) {
-                result[i] = mode.get(i);
-            }
-            return result;
-        }
-
-        private void dfs(TreeNode root, Map<Integer, Integer> map) {
-            if (root == null) {
-                return;
-            }
-            dfs(root.left, map);
-            map.put(root.val, map.getOrDefault(root.val, 0) + 1);
-            dfs(root.right, map);
-        }
-    }
-
+			return ret;
+		}
+	}
 }

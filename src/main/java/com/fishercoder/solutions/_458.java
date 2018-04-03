@@ -17,17 +17,8 @@ package com.fishercoder.solutions;
  */
 public class _458 {
 
-    public int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
-        if (buckets-- == 1) {
-            return 0;
-        }
-        int base = minutesToTest / minutesToDie + 1;
-        int count = 0;
-        while (buckets > 0) {
-            buckets /= base;
-            count++;
-        }
-        return count;
-    }
+	public int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
+		return (int) Math.ceil(Math.log(buckets) / Math.log(1.0 + minutesToTest / minutesToDie));
+	}
 
 }

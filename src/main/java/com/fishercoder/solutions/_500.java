@@ -1,11 +1,7 @@
 package com.fishercoder.solutions;
 
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Given a List of words, return the words that can be typed using letters of alphabet on only one row's of American keyboard like the image below.
@@ -23,34 +19,87 @@ import java.util.Set;
  */
 public class _500 {
 
-    public String[] findWords(String[] words) {
-        final Set<Character> row1 = new HashSet<>(Arrays.asList('q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'));
-        final Set<Character> row2 = new HashSet<>(Arrays.asList('a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'));
-        final Set<Character> row3 = new HashSet<>(Arrays.asList('z', 'x', 'c', 'v', 'b', 'n', 'm'));
-        final List<Set<Character>> setList = Arrays.asList(row1, row2, row3);
-        List<String> wordList = new ArrayList<>();
-        for (String word : words) {
-            String lowerCaseWord = word.toLowerCase();
-            boolean can = true;
-            for (Set<Character> row : setList) {
-                for (char c : lowerCaseWord.toCharArray()) {
-                    if (!row.contains(c)) {
-                        can = false;
-                        break;
-                    }
-                }
-                if (can) {
-                    wordList.add(word);
-                    break;
-                }
-                can = true;
-            }
-        }
-        String[] result = new String[wordList.size()];
-        for (int i = 0; i < wordList.size(); i++) {
-            result[i] = wordList.get(i);
-        }
-        return result;
-    }
+	public String[] findWords(String[] words) {
+		List<String> list = new ArrayList<>();
+		for (String word : words) {
+			if (acceptWord(word)) {
+				list.add(word);
+			}
+		}
+		String[] ret = new String[list.size()];
+		list.toArray(ret);
+		return ret;
+	}
 
+	private boolean acceptWord(String word) {
+		char[] charArray = word.toCharArray();
+		for (int i = 0; i < charArray.length - 1; i++) {
+			if (getLine(charArray[i]) != getLine(charArray[i + 1])) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private int getLine(char ch) {
+		switch (ch) {
+		case 'q':
+		case 'w':
+		case 'e':
+		case 'r':
+		case 't':
+		case 'y':
+		case 'u':
+		case 'i':
+		case 'o':
+		case 'p':
+		case 'Q':
+		case 'W':
+		case 'E':
+		case 'R':
+		case 'T':
+		case 'Y':
+		case 'U':
+		case 'I':
+		case 'O':
+		case 'P':
+			return 1;
+		case 'a':
+		case 's':
+		case 'd':
+		case 'f':
+		case 'g':
+		case 'h':
+		case 'j':
+		case 'k':
+		case 'l':
+		case 'A':
+		case 'S':
+		case 'D':
+		case 'F':
+		case 'G':
+		case 'H':
+		case 'J':
+		case 'K':
+		case 'L':
+			return 2;
+		case 'z':
+		case 'x':
+		case 'c':
+		case 'v':
+		case 'b':
+		case 'n':
+		case 'm':
+		case 'Z':
+		case 'X':
+		case 'C':
+		case 'V':
+		case 'B':
+		case 'N':
+		case 'M':
+			return 3;
+		default:
+			return 0;
+		}
+	}
 }

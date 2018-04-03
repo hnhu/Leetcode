@@ -31,19 +31,21 @@ public class _475 {
 
 	//credit: https://discuss.leetcode.com/topic/71460/short-and-clean-java-binary-search-solution
 	public static int findRadius(int[] houses, int[] heaters) {
+		Arrays.sort(houses);
 		Arrays.sort(heaters);
 		int radius = Integer.MIN_VALUE;
-		for (int house : houses) {
-			int index = Arrays.binarySearch(heaters, house);
-			if (index < 0) {
-				index = ~index;
-			}
-			int distance1 = index - 1 >= 0 ? house - heaters[index - 1] : Integer.MAX_VALUE;
-			int distance2 = index < heaters.length ? heaters[index] - house : Integer.MAX_VALUE;
 
-			radius = Math.max(radius, Math.min(distance1, distance2));
+		int j = 0;
+		for (int i = 0; i < houses.length; i++) {
+			if (Math.abs(houses[i] - heaters[j]) > radius) {
+				while (j < heaters.length - 1 && Math.abs(heaters[j] - houses[i]) >= Math.abs(heaters[j + 1] - houses[i])) {
+					j++;
+				}
+				radius = Math.max(radius, Math.abs(houses[i] - heaters[j]));
+			}
 		}
 		return radius;
+
 	}
 
 }

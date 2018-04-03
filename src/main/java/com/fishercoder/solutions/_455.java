@@ -28,26 +28,28 @@ import java.util.Arrays;
 
 public class _455 {
 
-    public int findContentChildren(int[] g, int[] s) {
-        Arrays.sort(g);
-        Arrays.sort(s);
+	public int findContentChildren(int[] g, int[] s) {
+		Arrays.sort(g);
+		Arrays.sort(s);
 
-        int result = 0;
-        for (int i = 0, j = 0; i < g.length && j < s.length; ) {
-            if (s[j] >= g[i]) {
-                result++;
-                i++;
-            }
-            j++;
-        }
-        return result;
-    }
+		int cookie = 0;
+		int child = 0;
+		while (cookie < s.length && child < g.length) {
+			if (s[cookie] >= g[child]) {
+				cookie++;
+				child++;
+			} else {
+				cookie++;
+			}
+		}
+		return child;
+	}
 
-    public static void main(String... args) {
-        _455 test = new _455();
-        int[] g = new int[]{1, 2, 3};
-        int[] s = new int[]{1, 1};
-        System.out.println(test.findContentChildren(g, s));
-    }
+	public static void main(String... args) {
+		_455 test = new _455();
+		int[] g = new int[] { 1, 2, 3 };
+		int[] s = new int[] { 1, 1 };
+		System.out.println(test.findContentChildren(g, s));
+	}
 
 }

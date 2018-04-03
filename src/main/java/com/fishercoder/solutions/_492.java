@@ -23,22 +23,14 @@ package com.fishercoder.solutions;
  */
 public class _492 {
 
-    public int[] constructRectangle(int area) {
-        int i = 0;
-        int j = area;
-        int[] result = new int[2];
-        while (i <= j) {
-            long product = i * j;
-            if (product == area) {
-                result[0] = j--;
-                result[1] = i++;
-            } else if (product > area) {
-                j--;
-            } else {
-                i++;
-            }
-        }
-        return result;
-    }
+	public int[] constructRectangle(int area) {
+		int width = (int) Math.sqrt(area);
+		for (int i = width; i > 0; i--) {
+			if (area % i == 0) {
+				return new int[] { area / i, i };
+			}
+		}
+		return new int[] { area, 1 };
+	}
 
 }
