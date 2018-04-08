@@ -1,5 +1,10 @@
 package com.fishercoder.solutions;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * We define the Perfect Number is a positive integer that is equal to the sum of all its positive divisors except itself.
 
@@ -15,21 +20,46 @@ package com.fishercoder.solutions;
  */
 public class _507 {
 
-    public boolean checkPerfectNumber(int num) {
-        if (num == 1) {
-            return false;
-        }
-        int sum = 0;
-        for (int i = 2; i <= Math.sqrt(num); i++) {
-            if (num % i == 0) {
-                sum += i;
-                if (i != num / i) {
-                    sum += num / i;
-                }
-            }
-        }
-        sum++;
-        return sum == num;
-    }
+	// return num == 6 || num == 28 || num == 496 || num == 8128 || num == 33550336;
+	public boolean checkPerfectNumber(int num) {
+		List<Integer> primes = findPrimeFactors(num);
+		Set<Integer> factors = createFactors(primes);
+		factors.add(1);
+		int sum = 0;
+		for (int f : factors) {
+			sum += f;
+		}
+		return sum == num * 2;
+	}
+
+	private Set<Integer> createFactors(List<Integer> primes) {
+		Set<Integer> factors = new HashSet<>();
+		if (primes.size() == 1) {
+			factors.add(primes.get(0));
+			return factors;
+		}
+		int factor = primes.get(0);
+		primes.remove(0);
+		Set<Integer> subFactors = createFactors(primes);
+		factors.add(factor);
+		factors.addAll(subFactors);
+		for (Integer i : subFactors) {
+			factors.add(factor * i);
+		}
+		return factors;
+	}
+
+	private List<Integer> findPrimeFactors(int num) {
+		List<Integer> primes = new ArrayList<>();
+		for (int i = 2; i < Math.sqrt(num) + 1; i++) {
+			if (num % i == 0) {
+				primes.add(i);
+				primes.addAll(findPrimeFactors(num / i));
+				return primes;
+			}
+		}
+		primes.add(num);
+		return primes;
+	}
 
 }

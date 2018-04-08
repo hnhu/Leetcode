@@ -1,8 +1,6 @@
 package com.fishercoder.solutions;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Given scores of N athletes, find their relative ranks and the people with the top three highest scores, who will be awarded medals: "Gold Medal", "Silver Medal" and "Bronze Medal".
@@ -19,30 +17,31 @@ import java.util.Map;
  */
 public class _506 {
 
-    public String[] findRelativeRanks(int[] nums) {
-        int[] tmp = new int[nums.length];
-        for (int i = 0; i < nums.length; i++) {
-            tmp[i] = nums[i];
-        }
-        Arrays.sort(tmp);
-        Map<Integer, String> rankMap = new HashMap();
-        int len = nums.length;
-        for (int i = len - 1; i >= 0; i--) {
-            if (i == len - 1) {
-                rankMap.put(tmp[i], "Gold Medal");
-            } else if (i == len - 2) {
-                rankMap.put(tmp[i], "Silver Medal");
-            } else if (i == len - 3) {
-                rankMap.put(tmp[i], "Bronze Medal");
-            } else {
-                rankMap.put(tmp[i], String.valueOf(len - i));
-            }
-        }
-        String[] result = new String[len];
-        for (int i = 0; i < len; i++) {
-            result[i] = rankMap.get(nums[i]);
-        }
-        return result;
-    }
+	public String[] findRelativeRanks(int[] nums) {
+		int times = 10;
+		while (times < nums.length) {
+			times *= 10;
+		}
+		for (int i = 0; i < nums.length; i++) {
+			nums[i] *= times;
+			nums[i] += i;
+		}
+		Arrays.sort(nums);
+
+		String[] ranking = new String[nums.length];
+		for (int i = 0; i < ranking.length; i++) {
+			ranking[nums[i] % times] = "" + (ranking.length - i);
+		}
+		if (nums.length > 0) {
+			ranking[nums[ranking.length - 1] % times] = "Gold Medal";
+		}
+		if (nums.length > 1) {
+			ranking[nums[ranking.length - 2] % times] = "Silver Medal";
+		}
+		if (nums.length > 2) {
+			ranking[nums[ranking.length - 3] % times] = "Bronze Medal";
+		}
+		return ranking;
+	}
 
 }

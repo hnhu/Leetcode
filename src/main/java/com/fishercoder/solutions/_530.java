@@ -1,9 +1,8 @@
 package com.fishercoder.solutions;
 
-import com.fishercoder.common.classes.TreeNode;
+import java.util.Stack;
 
-import java.util.Iterator;
-import java.util.TreeSet;
+import com.fishercoder.common.classes.TreeNode;
 
 /**
  * Given a binary search tree with non-negative values, find the minimum absolute difference between values of any two nodes.
@@ -27,29 +26,26 @@ import java.util.TreeSet;
  */
 public class _530 {
 
-    public int getMinimumDifference(TreeNode root) {
-        TreeSet<Integer> treeset = new TreeSet<>();
-        treeset.add(root.val);
-        dfs(root, treeset);
-        int diff = Integer.MAX_VALUE;
-        Iterator<Integer> iterator = treeset.iterator();
-        int prev = iterator.next();
-        while (iterator.hasNext()) {
-            int current = iterator.next();
-            diff = Math.min(diff, Math.abs(current - prev));
-            prev = current;
-        }
-        return diff;
-    }
-
-    private void dfs(TreeNode root, TreeSet<Integer> treeset) {
-        if (root.left != null) {
-            treeset.add(root.left.val);
-            dfs(root.left, treeset);
-        }
-        if (root.right != null) {
-            treeset.add(root.right.val);
-            dfs(root.right, treeset);
-        }
-    }
+	public int getMinimumDifference(TreeNode root) {
+		Integer val = null;
+		int min = Integer.MAX_VALUE;
+		Stack<TreeNode> stack = new Stack<>();
+		TreeNode p = root;
+		while (p != null || !stack.isEmpty()) {
+			if (p != null) {
+				stack.push(p);
+				p = p.left;
+			} else {
+				p = stack.pop();
+				if (val == null) {
+					val = p.val;
+				} else {
+					min = Math.min(min, p.val - val);
+					val = p.val;
+				}
+				p = p.right;
+			}
+		}
+		return min;
+	}
 }

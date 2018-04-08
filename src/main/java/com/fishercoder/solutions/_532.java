@@ -32,29 +32,29 @@ import java.util.Map;
  */
 public class _532 {
 
-    public int findPairs(int[] nums, int k) {
-        if (nums == null || nums.length == 0 || k < 0) {
-            return 0;
-        }
-
-        Map<Integer, Integer> map = new HashMap();
-        for (int num : nums) {
-            map.put(num, map.getOrDefault(num, 0) + 1);
-        }
-
-        int answer = 0;
-        for (int key : map.keySet()) {
-            if (k == 0) {
-                if (map.get(key) >= 2) {
-                    answer++;
-                }
-            } else {
-                if (map.containsKey(key + k)) {
-                    answer++;
-                }
-            }
-        }
-        return answer;
-    }
+	public int findPairs(int[] nums, int k) {
+		if (k < 0) {
+			return 0;
+		}
+		Map<Integer, Boolean> map = new HashMap<>();
+		for (Integer n : nums) {
+			map.put(n, map.containsKey(n));
+		}
+		int count = 0;
+		if (k == 0) {
+			for (Boolean duplicateNumber : map.values()) {
+				if (duplicateNumber) {
+					count++;
+				}
+			}
+		} else {
+			for (Integer n : map.keySet()) {
+				if (map.containsKey(n + k)) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
 
 }
